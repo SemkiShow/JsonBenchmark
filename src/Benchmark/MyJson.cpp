@@ -3,10 +3,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 #include "Benchmark/MyJson.hpp"
-#include "JSON.hpp"
+#include "Json.hpp"
 
 void RunMyJson()
 {
-    JSON json = JSON::Load("big.json");
+    Json json = Json::Load("big.json");
     json.Save("tmp.json");
 }
