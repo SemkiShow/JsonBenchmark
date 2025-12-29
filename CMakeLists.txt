@@ -16,7 +16,7 @@ add_subdirectory(thirdparty/simdjson)
 # yyjson
 add_subdirectory(thirdparty/yyjson)
 
-file(GLOB SOURCES src/*.cpp)
+file(GLOB_RECURSE SOURCES src/*.cpp)
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE include/)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -static)

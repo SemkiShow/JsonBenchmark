@@ -4,12 +4,4 @@
 
 #pragma once
 
-enum class Menu
-{
-    Main,
-    Exit
-};
-
-extern Menu currentMenu;
-
-void DrawUI();
+void RunSimdjson();

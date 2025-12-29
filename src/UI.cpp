@@ -2,8 +2,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
+#include "Benchmark.hpp"
 #include "Generator.hpp"
 #include "UI.hpp"
+#include "Utils.hpp"
 #include <filesystem>
 #include <iostream>
 
@@ -27,14 +29,28 @@ void DrawMainMenu()
     int input = 0;
     if (!(std::cin >> input))
     {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        ClearStdCin();
         return;
     }
 
-    if (input == generateJsonIdx) GenerateBigJson(1024);
+    if (input == generateJsonIdx)
+    {
+        std::cout << "What size would you like big.json to be (in MB)?\n";
+        int size;
+        while (!(std::cin >> size))
+        {
+            ClearStdCin();
+        }
+        GenerateBigJson(size);
+    }
     if (input == benchmarkIdx)
-        ;
+    {
+        auto result = RunBenchmarks();
+        std::cout << result;
+        std::cout << "Press Enter to continue...";
+        ClearStdCin();
+        std::cin.get();
+    }
     if (input == exitIdx) currentMenu = Menu::Exit;
 }
 

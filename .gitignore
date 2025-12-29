@@ -4,3 +4,4 @@ build*/
 perf.data*
 gmon.out
 big.json
+tmp.json
