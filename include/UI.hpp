@@ -7,7 +7,8 @@
 enum class Menu
 {
     Main,
-    Exit
+    Exit,
+    SingleLib
 };
 
 extern Menu currentMenu;

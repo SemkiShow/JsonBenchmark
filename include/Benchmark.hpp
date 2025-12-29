@@ -7,7 +7,7 @@
 #include <ostream>
 struct BenchmarkResult
 {
-    float nlohmannJsonTime = 0, simdjsonTime = 0, yyjsonTime = 0, myJsonTime = 0;
+    double nlohmannJsonTime = 0, simdjsonTime = 0, yyjsonTime = 0, myJsonTime = 0;
 };
 
 inline std::ostream& operator<<(std::ostream& out, const BenchmarkResult& result)

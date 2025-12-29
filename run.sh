@@ -30,9 +30,9 @@ fi
 # Profile build
 if [ "$1" == "-p" ] || [ "$1" == "--profile" ]; then
     clear
-    cmake -B build_profile -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -pg"
+    cmake -B build_profile -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-fno-omit-frame-pointer"
     cmake --build build_profile -j${nproc}
-    perf record --call-graph dwarf ./build_profile/bin/$executable_name
+    perf record -g --call-graph dwarf ./build_profile/bin/$executable_name
     hotspot perf.data
 fi
 
