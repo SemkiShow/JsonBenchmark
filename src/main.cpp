@@ -2,11 +2,14 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include <iostream>
+#include "UI.hpp"
 
 int main()
 {
-    std::cout << "Hello, World!\n";
+    while (currentMenu != Menu::Exit)
+    {
+        DrawUI();
+    }
 
     return 0;
 }
