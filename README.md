@@ -12,8 +12,9 @@ A test project for benchmarking different json libraries
 
 1. Run 
 ```bash
-git clone https://github.com/SemkiShow/JsonBenchmark.git --recurse-submodules
+git clone https://github.com/SemkiShow/JsonBenchmark
 cd JsonBenchmark
+git submodule update --init --recursive --depth 1 --jobs 8
 chmod +x run.sh
 ./run.sh
 ```
