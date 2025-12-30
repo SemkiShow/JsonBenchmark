@@ -5,9 +5,9 @@
 #pragma once
 
 #include <filesystem>
-#include <map>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <variant>
 #include <vector>
 
@@ -24,7 +24,7 @@ class Json
 {
   public:
     using array_t = std::vector<Json>;
-    using object_t = std::map<std::string, Json>;
+    using object_t = std::unordered_map<std::string, Json>;
     using value_t = std::variant<std::nullptr_t, bool, int, double, std::string, array_t, object_t>;
 
   private:

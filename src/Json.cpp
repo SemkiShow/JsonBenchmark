@@ -93,7 +93,7 @@ Json Json::ParseObject(const std::string& s, size_t& idx)
         SkipWhitespace(s, idx);
         if (s[idx] != ':') throw std::runtime_error("Expected ':' after key");
         ++idx;
-        obj[key] = ParseValue(s, idx);
+        obj[std::move(key)] = ParseValue(s, idx);
         SkipWhitespace(s, idx);
         if (s[idx] == '}')
         {
@@ -350,7 +350,7 @@ void Json::Save(const std::filesystem::path& path)
 
 Json Json::Load(const std::filesystem::path& path)
 {
-    std::ifstream f(path);
+    std::ifstream f(path, std::ios::binary);
     if (!f) throw std::runtime_error("Cannot open file: " + path.string());
 
     std::streamsize size = std::filesystem::file_size(path);
