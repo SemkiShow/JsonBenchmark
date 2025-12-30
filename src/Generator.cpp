@@ -20,7 +20,7 @@ class JsonGenerator
     int indentation = 0;
     int maxDepth = 10;
 
-    std::string GetIndentation() { return std::string(indentation, '\t'); }
+    void GetIndentation(std::string& buf) { buf.append(4 * indentation, ' '); }
 
   public:
     JsonGenerator()
@@ -37,82 +37,76 @@ class JsonGenerator
         indentation = fmax(0, indentation);
     }
 
-    std::string RandomString()
+    void RandomString(std::string& buf)
     {
         size_t len = stringLengthDist(rng);
-        std::string s;
+        buf += "\"";
         for (size_t i = 0; i < len; i++)
-            s += charset[rng() % charset.size()];
-        return "\"" + s + "\"";
+            buf += charset[rng() % charset.size()];
+        buf += "\"";
     }
 
-    std::string GenerateValue(int depth)
+    void GenerateValue(std::string& buf, int depth)
     {
-        std::string out;
-
         // Higher depth increases the chance of picking a primitive to avoid infinite recursion
         int type = depth > maxDepth ? (rand() % 3) : typeDist(rng);
 
         switch (type)
         {
         case 0:
-            out += RandomString();
+            RandomString(buf);
             break;
         case 1:
-            out += std::to_string(doubleDist(rng));
+            buf += std::to_string(doubleDist(rng));
             break;
         case 2:
-            out += (boolDist(rng) ? "true" : "false");
+            buf += (boolDist(rng) ? "true" : "false");
             break;
         case 3:
-            out += GenerateArray(depth + 1, false);
+            GenerateArray(buf, depth + 1, false);
             break;
         case 4:
-            out += GenerateObject(depth + 1, false);
+            GenerateObject(buf, depth + 1, false);
             break;
         }
-
-        return out;
     }
 
-    std::string GenerateArray(int depth, bool indentStart = true)
+    void GenerateArray(std::string& buf, int depth, bool indentStart = true)
     {
-        std::string out;
-
-        if (indentStart) out += GetIndentation();
-        out += "[\n";
+        if (indentStart) GetIndentation(buf);
+        buf += "[\n";
         IncreaseIndentation();
         int size = rng() % 10 + 1;
         for (int i = 0; i < size; i++)
         {
-            out += GetIndentation();
-            out += GenerateValue(depth);
-            if (i < size - 1) out += ",\n";
+            GetIndentation(buf);
+            GenerateValue(buf, depth);
+            if (i < size - 1) buf += ",\n";
         }
         DecreaseIndentation();
-        out += "\n" + GetIndentation() + "]";
-
-        return out;
+        buf += "\n";
+        GetIndentation(buf);
+        buf += "]";
     }
 
-    std::string GenerateObject(int depth, bool indentStart = true)
+    void GenerateObject(std::string& buf, int depth, bool indentStart = true)
     {
-        std::string out;
-
-        if (indentStart) out += GetIndentation();
-        out += "{\n";
+        if (indentStart) GetIndentation(buf);
+        buf += "{\n";
         IncreaseIndentation();
         int size = rng() % 8 + 1;
         for (int i = 0; i < size; i++)
         {
-            out += GetIndentation() + RandomString() + ": ";
-            out += GenerateValue(depth);
-            if (i < size - 1) out += ",\n";
+            GetIndentation(buf);
+            RandomString(buf);
+            buf += ": ";
+            GenerateValue(buf, depth);
+            if (i < size - 1) buf += ",\n";
         }
         DecreaseIndentation();
-        out += "\n" + GetIndentation() + "}";
-
-        return out;
+        buf += "\n";
+        GetIndentation(buf);
+        buf += "}";
     }
 };
 
@@ -132,7 +126,7 @@ void GenerateBigJson(float targetSizeMB)
     gen.IncreaseIndentation();
     while (bytesWritten + chunk.size() < targetSizeMB * 1024 * 1024)
     {
-        chunk += gen.GenerateObject(0);
+        gen.GenerateObject(chunk, 0);
         chunk += ",\n";
 
         if (chunk.size() > chunkSize)
