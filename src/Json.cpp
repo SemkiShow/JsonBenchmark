@@ -300,34 +300,34 @@ void Json::ToString(std::string& buf, size_t level) const
     {
         const auto& arr = std::get<array_t>(value);
         buf += "[";
-        if (format == JSONFormat::Newline) buf += '\n';
+        if (format == JsonFormat::Newline) buf += '\n';
         for (size_t i = 0; i < arr.size(); ++i)
         {
-            if (format == JSONFormat::Newline) Indentation(buf, level + 1);
+            if (format == JsonFormat::Newline) Indentation(buf, level + 1);
             arr[i].ToString(buf, level + 1);
             if (i < arr.size() - 1) buf += ", ";
-            if (format == JSONFormat::Newline) buf += '\n';
+            if (format == JsonFormat::Newline) buf += '\n';
         }
-        if (format == JSONFormat::Newline) Indentation(buf, level);
+        if (format == JsonFormat::Newline) Indentation(buf, level);
         buf += "]";
     }
     else if (IsObject())
     {
         const auto& obj = std::get<object_t>(value);
         buf += "{";
-        if (format == JSONFormat::Newline) buf += '\n';
+        if (format == JsonFormat::Newline) buf += '\n';
         size_t count = 0;
         for (const auto& [k, v]: obj)
         {
-            if (format == JSONFormat::Newline) Indentation(buf, level + 1);
+            if (format == JsonFormat::Newline) Indentation(buf, level + 1);
             buf += "\"";
             EscapeString(buf, k);
             buf += "\": ";
             v.ToString(buf, level + 1);
             if (count++ < obj.size() - 1) buf += ", ";
-            if (format == JSONFormat::Newline) buf += '\n';
+            if (format == JsonFormat::Newline) buf += '\n';
         }
-        if (format == JSONFormat::Newline) Indentation(buf, level);
+        if (format == JsonFormat::Newline) Indentation(buf, level);
         buf += "}";
     }
 }

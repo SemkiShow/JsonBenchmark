@@ -11,7 +11,7 @@
 #include <variant>
 #include <vector>
 
-enum class JSONFormat
+enum class JsonFormat
 {
     Newline,
     Inline
@@ -40,9 +40,9 @@ class Json
     Json(const std::string& s) : value(s) {}
     Json(const array_t& a) : value(a) {}
     Json(const object_t& o) : value(o) {}
-    Json(const JSONFormat format) : value(nullptr), format(format) {}
+    Json(const JsonFormat format) : value(nullptr), format(format) {}
 
-    JSONFormat format = JSONFormat::Newline;
+    JsonFormat format = JsonFormat::Newline;
 
     // Type queries
     bool IsNull() const { return std::holds_alternative<std::nullptr_t>(value); }
